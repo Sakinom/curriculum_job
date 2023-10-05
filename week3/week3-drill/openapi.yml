@@ -1,0 +1,152 @@
+openapi: 3.0.0
+
+info:
+  title: Week3 Drill
+  description: POSSE JOBer-Yosei Week3 Drill
+  version: 1.0.0
+
+servers:
+  - url: http://localhost/api
+    description: Local server
+
+paths:
+  /todos:
+    get:
+      tags:
+        - todos
+      summary: Get all todos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+    post:
+      tags:
+        - todos
+      summary: Create a todo
+      requestBody:
+        description: Todo object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - text
+              properties:
+                text:
+                  type: string
+                  example: Do something
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+  /todos/{todoId}:
+    get:
+      tags:
+        - todos
+      summary: Get a todo
+      parameters:
+        - name: todoId
+          in: path
+          description: ID of todo to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '404':
+          description: Not Found
+    put:
+      tags:
+        - todos
+      summary: Update a todo
+      parameters:
+        - name: todoId
+          in: path
+          description: ID of todo to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Todo object to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - text
+              properties:
+                text:
+                  type: string
+                  example: Do something
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - todos
+      summary: Delete a todo
+      parameters:
+        - name: todoId
+          in: path
+          description: ID of todo to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+
+
+components:
+  schemas:
+    Todo:
+      type: object
+      required:
+        - id
+        - text
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        text:
+          type: string
+          example: Do something
+        created_at:
+          type: string
+          format: date-time
+          example: 2023-01-01T00:00:00Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2023-01-01T00:00:00Z
+
+tags:
+  - name: todos
+    description: Todo operations
